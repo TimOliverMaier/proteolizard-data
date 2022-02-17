@@ -1,3 +1,9 @@
+# python package
+
+python/pyproteolizard/__pycache__/
+python/pyproteolizard.egg-info/
+
+
 # Prerequisites
 *.d
 
