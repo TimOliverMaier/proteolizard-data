@@ -48,7 +48,7 @@ class PyTimsDataHandle:
         :return: table of peaks chosen and fragmented (DDAExperiment) of all frames in experiment
         """
         return pd.read_sql_query("SELECT * from Precursors", sqlite3.connect(self.dp + "/analysis.tdf"))
-    
+
     def get_precursor_by_id(self, precursor_id):
         """Get data of precursor by its id in Precursors table.
 
@@ -56,8 +56,8 @@ class PyTimsDataHandle:
             precursor_id (int): ID of precursor to get in Precursors table.
         """
         return pd.read_sql_query(f"SELECT * from Precursors where Id={precursor_id}", \
-            sqlite3.connect(self.dp + "/analysis.tdf"))
-    
+            sqlite3.connect(self.dp + "/analysis.tdf")).replace([None],[np.nan],regex=False)
+
     def frames_to_rts(self, frames: np.ndarray):
         d = dict(zip(self.meta_data.Id.values, self.meta_data.Time.values))
         return [d[x] for x in frames]
@@ -81,7 +81,7 @@ class PyTimsDataHandle:
         # extract rt frame region
         region = self.meta_data[(self.meta_data['Time'] >= rt_min) & (self.meta_data['Time'] <= rt_max)]
         return region[region['MsMsType'] != 0].Id.values
-            
+
     def __get_precursor_frame_ids(self):
         """
         :return: array of all precursor frame ids
